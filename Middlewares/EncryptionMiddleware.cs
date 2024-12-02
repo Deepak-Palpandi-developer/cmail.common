@@ -20,6 +20,13 @@ namespace Cgmail.Common.Middlewares
 
         public async Task Invoke(HttpContext context, IServiceProvider serviceProvider)
         {
+
+            if (context.Request.Path.StartsWithSegments("/emailHub"))
+            {
+                await _next(context);
+                return;
+            }
+
             bool enableEncryption = _configuration.GetValue<bool>("EnableEncryption");
 
             if (!enableEncryption)
